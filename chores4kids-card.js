@@ -69,7 +69,7 @@ const C4K_I18N = {
 		'msg.no_tasks': 'No tasks right now.',
 			'btn.done': 'Done', 'btn.start_task': 'Start task', 'btn.complete_task': 'Complete task', 'btn.task_done': 'Task done',
 			'lbl.awaiting':'Awaiting approval',
-			'lbl.taken_by':'Task taken by {name}',
+			'lbl.taken_by':'Task taken by {name}', 'lbl.completed_by': 'Task completed by {name}',
 			'lbl.points': 'points',
 			'section.daily_tasks': 'Today',
 			'section.weekly_tasks': 'Weekly tasks',
@@ -166,7 +166,7 @@ const C4K_I18N = {
 		'status.overdue':'Forfalden','overdue.reassign_prompt':'Denne opgave er også planlagt i dag. Tildel den igen?','overdue.yes':'Ja, tildel igen','overdue.no':'Nej tak',
 		'debug.mark_overdue':'[TEST] Markér forfalden',
 		'shop.title':'Pointshop','shop.open':'Åbn shop','shop.item':'Vare','shop.price':'Pris','shop.icon':'Ikon','shop.image':'Billede','shop.upload':'Upload billede','shop.add_item':'Tilføj vare','shop.history':'Købshistorik','shop.child':'Barn','shop.when':'Tidspunkt','shop.date':'Dato','shop.time':'Tidspunkt','shop.advanced':'Avancerede handlinger','shop.entity':'Enhed','shop.operation':'Handling','shop.add_action':'Tilføj handling','shop.add_delay':'Tilføj delay','shop.steps':'Trin','shop.seconds':'Sekunder','shop.minutes':'Minutter','shop.hours':'Timer','shop.delay':'Forsinkelse','shop.active':'Aktiv','shop.buy':'Køb','shop.clear_history':'Ryd historik','confirm.clear_history':'Ryd hele købshistorikken?',
-			'card.child_title_fallback': 'Chores4Kids – {name}', 'msg.child_not_found': 'Barn ikke fundet. Tjek navn i kort-konfigurationen.', 'msg.no_tasks':'Ingen opgaver lige nu.', 'btn.done':'Fuldført', 'btn.start_task':'Start opgave', 'btn.complete_task':'Opgave klaret', 'btn.task_done':'Opgave færdig', 'lbl.awaiting':'Afventer godkendelse', 'lbl.taken_by':'Opgave taget af {name}', 'lbl.points': 'point',
+			'card.child_title_fallback': 'Chores4Kids – {name}', 'msg.child_not_found': 'Barn ikke fundet. Tjek navn i kort-konfigurationen.', 'msg.no_tasks':'Ingen opgaver lige nu.', 'btn.done':'Fuldført', 'btn.start_task':'Start opgave', 'btn.complete_task':'Opgave klaret', 'btn.task_done':'Opgave færdig', 'lbl.awaiting':'Afventer godkendelse', 'lbl.taken_by':'Opgave taget af {name}', 'lbl.completed_by': 'Opgave udført af {name}', 'lbl.points': 'point',
 			'section.daily_tasks': 'Dagens opgaver',
 			'section.weekly_tasks': 'Ugens opgaver',
 			'lbl.deadline': 'Deadline: {date}',
@@ -230,7 +230,7 @@ const C4K_I18N = {
 			'shop.title':'Shop','shop.open':'Öppna shop','shop.item':'Vara','shop.price':'Pris','shop.icon':'Ikon','shop.image':'Bild','shop.upload':'Ladda upp bild','shop.add_item':'Lägg till vara','shop.history':'Köphistorik','shop.child':'Barn','shop.when':'Tidpunkt','shop.date':'Datum','shop.time':'Tid','shop.active':'Aktiv','shop.buy':'Köp','shop.clear_history':'Rensa historik','confirm.clear_history':'Rensa all köphistorik?',
 			'shop.advanced':'Avancerade åtgärder','shop.entity':'Enhet','shop.operation':'Åtgärd','shop.add_action':'Lägg till åtgärd','shop.add_delay':'Lägg till fördröjning','shop.steps':'Steg','shop.seconds':'Sekunder','shop.minutes':'Minuter','shop.hours':'Timmar','shop.delay':'Fördröjning',
 			'sort.configure':'Sortering','sort.title':'Välj ordning','sort.categories_order':'Ordning för kategorier','sort.none':'Ingen kategori','sort.save':'Spara','sort.reset':'Återställ',
-			'card.child_title_fallback':'Chores4Kids – {name}','msg.child_not_found':'Barn hittades inte. Kontrollera namnet i kortets konfiguration.','msg.no_tasks':'Inga uppgifter just nu.', 'btn.done':'Klar','btn.start_task':'Starta uppgift','btn.complete_task':'Uppgift klar','btn.task_done':'Uppgift klar','lbl.awaiting':'Väntar på godkännande','lbl.taken_by':'Uppgiften är tagen av {name}','lbl.points':'poäng',
+			'card.child_title_fallback':'Chores4Kids – {name}','msg.child_not_found':'Barn hittades inte. Kontrollera namnet i kortets konfiguration.','msg.no_tasks':'Inga uppgifter just nu.', 'btn.done':'Klar','btn.start_task':'Starta uppgift','btn.complete_task':'Uppgift klar','btn.task_done':'Uppgift klar','lbl.awaiting':'Väntar på godkännande','lbl.taken_by':'Uppgiften är tagen av {name}','lbl.completed_by': 'Uppgift slutförd av {name}','lbl.points':'poäng',
 			'section.daily_tasks':'Idag',
 			'section.weekly_tasks':'Veckouppgifter',
 			'lbl.deadline':'Deadline: {date}',
@@ -286,7 +286,7 @@ const C4K_I18N = {
 			'shop.title':'Butikk','shop.open':'Åpne butikk','shop.item':'Vare','shop.price':'Pris','shop.icon':'Ikon','shop.image':'Bilde','shop.upload':'Last opp bilde','shop.add_item':'Legg til vare','shop.history':'Kjøpshistorikk','shop.child':'Barn','shop.when':'Tidspunkt','shop.date':'Dato','shop.time':'Tidspunkt','shop.active':'Aktiv','shop.buy':'Kjøp','shop.clear_history':'Rydd historikk','confirm.clear_history':'Rydd hele kjøpshistorikken?',
 			'shop.advanced':'Avanserte handlinger','shop.entity':'Enhet','shop.operation':'Handling','shop.add_action':'Legg til handling','shop.add_delay':'Legg til forsinkelse','shop.steps':'Steg','shop.seconds':'Sekunder','shop.minutes':'Minutter','shop.hours':'Timer','shop.delay':'Forsinkelse',
 			'sort.configure':'Sortering','sort.title':'Velg rekkefølge','sort.categories_order':'Rekkefølge for kategorier','sort.none':'Ingen kategori','sort.save':'Lagre','sort.reset':'Nullstill',
-			'card.child_title_fallback':'Chores4Kids – {name}','msg.child_not_found':'Barn ikke funnet. Sjekk navnet i kortkonfigurasjonen.','msg.no_tasks':'Ingen oppgaver nå.', 'btn.done':'Ferdig','btn.start_task':'Start oppgave','btn.complete_task':'Oppgave klar','btn.task_done':'Oppgave ferdig','lbl.awaiting':'Venter på godkjenning','lbl.taken_by':'Oppgave tatt av {name}','lbl.points':'poeng',
+			'card.child_title_fallback':'Chores4Kids – {name}','msg.child_not_found':'Barn ikke funnet. Sjekk navnet i kortkonfigurasjonen.','msg.no_tasks':'Ingen oppgaver nå.', 'btn.done':'Ferdig','btn.start_task':'Start oppgave','btn.complete_task':'Oppgave klar','btn.task_done':'Oppgave ferdig','lbl.awaiting':'Venter på godkjenning','lbl.taken_by':'Oppgave tatt av {name}','lbl.completed_by': 'Oppgave fullført av {name}','lbl.points':'poeng',
 			'section.daily_tasks':'I dag',
 			'section.weekly_tasks':'Ukens oppgaver',
 			'lbl.deadline':'Frist: {date}',
@@ -342,7 +342,7 @@ const C4K_I18N = {
 			'shop.title':'Shop','shop.open':'Shop öffnen','shop.item':'Artikel','shop.price':'Preis','shop.icon':'Symbol','shop.image':'Bild','shop.upload':'Bild hochladen','shop.add_item':'Artikel hinzufügen','shop.history':'Kaufhistorie','shop.child':'Kind','shop.when':'Zeitpunkt','shop.date':'Datum','shop.time':'Uhrzeit','shop.active':'Aktiv','shop.buy':'Kaufen','shop.clear_history':'Historie löschen','confirm.clear_history':'Gesamte Kaufhistorie löschen?',
 			'shop.advanced':'Erweiterte Aktionen','shop.entity':'Entität','shop.operation':'Aktion','shop.add_action':'Aktion hinzufügen','shop.add_delay':'Verzögerung hinzufügen','shop.steps':'Schritte','shop.seconds':'Sekunden','shop.minutes':'Minuten','shop.hours':'Stunden','shop.delay':'Verzögerung',
 			'sort.configure':'Sortierung','sort.title':'Reihenfolge wählen','sort.categories_order':'Reihenfolge der Kategorien','sort.none':'Keine Kategorie','sort.save':'Speichern','sort.reset':'Zurücksetzen',
-			'card.child_title_fallback':'Chores4Kids – {name}','msg.child_not_found':'Kind nicht gefunden. Prüfe den Namen in der Kartenkonfiguration.','msg.no_tasks':'Keine Aufgaben gerade.', 'btn.done':'Fertig','btn.start_task':'Aufgabe starten','btn.complete_task':'Aufgabe erledigt','btn.task_done':'Aufgabe erledigt','lbl.awaiting':'Wartet auf Genehmigung','lbl.taken_by':'Aufgabe übernommen von {name}','lbl.points':'Punkte',
+			'card.child_title_fallback':'Chores4Kids – {name}','msg.child_not_found':'Kind nicht gefunden. Prüfe den Namen in der Kartenkonfiguration.','msg.no_tasks':'Keine Aufgaben gerade.', 'btn.done':'Fertig','btn.start_task':'Aufgabe starten','btn.complete_task':'Aufgabe erledigt','btn.task_done':'Aufgabe erledigt','lbl.awaiting':'Wartet auf Genehmigung','lbl.taken_by':'Aufgabe übernommen von {name}','lbl.completed_by': 'Aufgabe erledigt von {name}','lbl.points':'Punkte',
 			'section.daily_tasks':'Heute',
 			'section.weekly_tasks':'Wöchentliche Aufgaben',
 			'lbl.deadline':'Frist: {date}',
@@ -398,7 +398,7 @@ const C4K_I18N = {
 			'shop.title':'Tienda','shop.open':'Abrir tienda','shop.item':'Artículo','shop.price':'Precio','shop.icon':'Icono','shop.image':'Imagen','shop.upload':'Subir imagen','shop.add_item':'Añadir artículo','shop.history':'Historial de compras','shop.child':'Niño','shop.when':'Fecha y hora','shop.date':'Fecha','shop.time':'Hora','shop.active':'Activo','shop.buy':'Comprar','shop.clear_history':'Limpiar historial','confirm.clear_history':'¿Limpiar todo el historial de compras?',
 			'shop.advanced':'Acciones avanzadas','shop.entity':'Entidad','shop.operation':'Operación','shop.add_action':'Añadir acción','shop.add_delay':'Añadir retraso','shop.steps':'Pasos','shop.seconds':'Segundos','shop.minutes':'Minutos','shop.hours':'Horas','shop.delay':'Retraso',
 			'sort.configure':'Ordenación','sort.title':'Elegir orden','sort.categories_order':'Orden de categorías','sort.none':'Sin categoría','sort.save':'Guardar','sort.reset':'Restablecer',
-			'card.child_title_fallback':'Chores4Kids – {name}','msg.child_not_found':'Niño no encontrado. Revisa el nombre en la configuración de la tarjeta.','msg.no_tasks':'No hay tareas por ahora.', 'btn.done':'Hecho','btn.start_task':'Iniciar tarea','btn.complete_task':'Tarea hecha','btn.task_done':'Tarea hecha','lbl.awaiting':'En espera de aprobación','lbl.taken_by':'Tarea tomada por {name}','lbl.points':'puntos',
+			'card.child_title_fallback':'Chores4Kids – {name}','msg.child_not_found':'Niño no encontrado. Revisa el nombre en la configuración de la tarjeta.','msg.no_tasks':'No hay tareas por ahora.', 'btn.done':'Hecho','btn.start_task':'Iniciar tarea','btn.complete_task':'Tarea hecha','btn.task_done':'Tarea hecha','lbl.awaiting':'En espera de aprobación','lbl.taken_by':'Tarea tomada por {name}','lbl.completed_by': 'Tarea completada por {name}','lbl.points':'puntos',
 			'section.daily_tasks':'Hoy',
 			'section.weekly_tasks':'Tareas semanales',
 			'lbl.deadline':'Fecha límite: {date}',
@@ -454,7 +454,7 @@ const C4K_I18N = {
 			'shop.title':'Boutique','shop.open':'Ouvrir la boutique','shop.item':'Article','shop.price':'Prix','shop.icon':'Icône','shop.image':'Image','shop.upload':'Téléverser une image','shop.add_item':'Ajouter un article','shop.history':'Historique des achats','shop.child':'Enfant','shop.when':'Date et heure','shop.date':'Date','shop.time':'Heure','shop.active':'Actif','shop.buy':'Acheter','shop.clear_history':'Effacer l`historique','confirm.clear_history':'Effacer tout l`historique des achats?',
 			'shop.advanced':'Actions avancées','shop.entity':'Entité','shop.operation':'Opération','shop.add_action':'Ajouter une action','shop.add_delay':'Ajouter un délai','shop.steps':'Étapes','shop.seconds':'Secondes','shop.minutes':'Minutes','shop.hours':'Heures','shop.delay':'Délai',
 			'sort.configure':'Tri','sort.title':'Choisir l’ordre','sort.categories_order':'Ordre des catégories','sort.none':'Aucune catégorie','sort.save':'Enregistrer','sort.reset':'Réinitialiser',
-			'card.child_title_fallback':'Chores4Kids – {name}','msg.child_not_found':'Enfant introuvable. Vérifiez le nom dans la configuration de la carte.','msg.no_tasks':'Aucune tâche pour le moment.', 'btn.done':'Terminé','btn.start_task':'Démarrer la tâche','btn.complete_task':'Tâche terminée','btn.task_done':'Tâche terminée','lbl.awaiting':'En attente d’approbation','lbl.taken_by':'Tâche prise par {name}','lbl.points':'points',
+			'card.child_title_fallback':'Chores4Kids – {name}','msg.child_not_found':'Enfant introuvable. Vérifiez le nom dans la configuration de la carte.','msg.no_tasks':'Aucune tâche pour le moment.', 'btn.done':'Terminé','btn.start_task':'Démarrer la tâche','btn.complete_task':'Tâche terminée','btn.task_done':'Tâche terminée','lbl.awaiting':'En attente d’approbation','lbl.taken_by':'Tâche prise par {name}','lbl.completed_by': 'Tâche terminée par {name}','lbl.points':'points',
 			'section.daily_tasks':'Aujourd’hui',
 			'section.weekly_tasks':'Tâches hebdomadaires',
 			'lbl.deadline':'Date limite : {date}',
@@ -510,7 +510,7 @@ const C4K_I18N = {
 			'shop.title':'Kauppa','shop.open':'Avaa kauppa','shop.item':'Tuote','shop.price':'Hinta','shop.icon':'Kuvake','shop.image':'Kuva','shop.upload':'Lataa kuva','shop.add_item':'Lisää tuote','shop.history':'Ostohistoria','shop.child':'Lapsi','shop.when':'Aika','shop.date':'Päiväys','shop.time':'Aika','shop.active':'Aktiivinen','shop.buy':'Osta','shop.clear_history':'Tyhjennä historia','confirm.clear_history':'Tyhjennä koko ostohistoria?',
 			'shop.advanced':'Edistyneet toiminnot','shop.entity':'Entiteetti','shop.operation':'Toiminto','shop.add_action':'Lisää toiminto','shop.add_delay':'Lisää viive','shop.steps':'Vaiheet','shop.seconds':'Sekuntia','shop.minutes':'Minuuttia','shop.hours':'Tuntia','shop.delay':'Viive',
 			'sort.configure':'Lajittelu','sort.title':'Valitse järjestys','sort.categories_order':'Kategorioiden järjestys','sort.none':'Ei kategoriaa','sort.save':'Tallenna','sort.reset':'Palauta',
-			'card.child_title_fallback':'Chores4Kids – {name}','msg.child_not_found':'Lasta ei löytynyt. Tarkista nimi kortin asetuksista.','msg.no_tasks':'Ei tehtäviä juuri nyt.', 'btn.done':'Valmis','btn.start_task':'Aloita tehtävä','btn.complete_task':'Tehtävä valmis','btn.task_done':'Tehtävä valmis','lbl.awaiting':'Odottaa hyväksyntää','lbl.taken_by':'Tehtävän otti {name}','lbl.points':'pistettä',
+			'card.child_title_fallback':'Chores4Kids – {name}','msg.child_not_found':'Lasta ei löytynyt. Tarkista nimi kortin asetuksista.','msg.no_tasks':'Ei tehtäviä juuri nyt.', 'btn.done':'Valmis','btn.start_task':'Aloita tehtävä','btn.complete_task':'Tehtävä valmis','btn.task_done':'Tehtävä valmis','lbl.awaiting':'Odottaa hyväksyntää','lbl.taken_by':'Tehtävän otti {name}','lbl.completed_by': 'Tehtävä suoritettu: {name}','lbl.points':'pistettä',
 			'section.daily_tasks':'Tänään',
 			'section.weekly_tasks':'Viikkotehtävät',
 			'lbl.deadline':'Määräpäivä: {date}',
@@ -566,7 +566,7 @@ const C4K_I18N = {
 			'shop.title':'Negozio','shop.open':'Apri negozio','shop.item':'Articolo','shop.price':'Prezzo','shop.icon':'Icona','shop.image':'Immagine','shop.upload':'Carica immagine','shop.add_item':'Aggiungi articolo','shop.history':'Storico acquisti','shop.child':'Bambino','shop.when':'Data e ora','shop.date':'Data','shop.time':'Ora','shop.active':'Attivo','shop.buy':'Compra','shop.clear_history':'Cancella storico','confirm.clear_history':'Cancellare tutto lo storico acquisti?',
 			'shop.advanced':'Azioni avanzate','shop.entity':'Entità','shop.operation':'Operazione','shop.add_action':'Aggiungi azione','shop.add_delay':'Aggiungi ritardo','shop.steps':'Passi','shop.seconds':'Secondi','shop.minutes':'Minuti','shop.hours':'Ore','shop.delay':'Ritardo',
 			'sort.configure':'Ordinamento','sort.title':'Scegli ordine','sort.categories_order':'Ordine categorie','sort.none':'Nessuna categoria','sort.save':'Salva','sort.reset':'Reimposta',
-			'card.child_title_fallback':'Chores4Kids – {name}','msg.child_not_found':'Bambino non trovato. Controlla il nome nella configurazione della scheda.','msg.no_tasks':'Nessuna attività al momento.', 'btn.done':'Fatto','btn.start_task':'Avvia attività','btn.complete_task':'Attività completata','btn.task_done':'Attività completata','lbl.awaiting':'In attesa di approvazione','lbl.taken_by':'Attività presa da {name}','lbl.points':'punti',
+			'card.child_title_fallback':'Chores4Kids – {name}','msg.child_not_found':'Bambino non trovato. Controlla il nome nella configurazione della scheda.','msg.no_tasks':'Nessuna attività al momento.', 'btn.done':'Fatto','btn.start_task':'Avvia attività','btn.complete_task':'Attività completata','btn.task_done':'Attività completata','lbl.awaiting':'In attesa di approvazione','lbl.taken_by':'Attività presa da {name}','lbl.completed_by': 'Attività completata da {name}','lbl.points':'punti',
 			'section.daily_tasks':'Oggi',
 			'section.weekly_tasks':'Attività settimanali',
 			'lbl.deadline':'Scadenza: {date}',
@@ -2441,6 +2441,9 @@ class Chores4KidsDevCard extends LitElement {
 						const claimedById = t?.fastest_wins_claimed_by_child_id;
 						const claimedByName = t?.fastest_wins_claimed_by_child_name || claimedById;
 						const isTakenByOther = !!t?.fastest_wins && !!claimedById && !!myChildId && claimedById !== myChildId;
+						const isCompletedByOther = isTakenByOther && (t.status === 'awaiting_approval' || t.status === 'approved');
+						const otherLabelKey = isCompletedByOther ? 'lbl.completed_by' : 'lbl.taken_by';
+						const otherLabel = this._t(otherLabelKey, {name: claimedByName||'—'});
 						const isOverdue = this._isTaskOverdue(t);
 						const rowStyle = (!isOverdue && groupColor)
 							? `background: color-mix(in srgb, ${groupColor} 10%, var(--card-background-color)); box-shadow: inset 6px 0 0 ${groupColor};`
@@ -2454,12 +2457,12 @@ class Chores4KidsDevCard extends LitElement {
 										${pointsEnabled ? html`<span class="chip chip-points">${t.points} ${this._t('lbl.points')}</span>`:''}
 										${t?.due ? html`<span class="chip chip-deadline">${this._t('lbl.deadline',{date: this._formatDueDate(t.due)})}</span>` : ''}
 										${(pointsEnabled && bonusBy) ? html`<span class="${bonusClass}">${this._t('lbl.early_bonus_by',{ points: Number(t.early_bonus_points||0), date: bonusBy })}</span>` : ''}
-										${isTakenByOther ? html`<span class="chip chip-deadline">${this._t('lbl.taken_by',{name: claimedByName||'—'})}</span>` : ''}
+										${isTakenByOther ? html`<span class="chip chip-deadline">${otherLabel}</span>` : ''}
 										${this._isTaskOverdue(t)? html` <span class="chip status-overdue">${this._t('status.overdue')}</span>`:''}
 									</div>
 								</div>
 								<div class="actions" style="display:flex; flex-direction:column; gap:6px;">
-									${isTakenByOther ? html`<button class="btn" disabled>${this._t('lbl.taken_by',{name: claimedByName||'—'})}</button>`
+									${isTakenByOther ? html`<button class="btn" disabled>${otherLabel}</button>`
 										: t.status==="assigned" ? (t.quick_complete ? html`<button class="btn-primary task-done" ?disabled=${this._isTaskBusy(t.id)} @click=${()=>this._completeNow(t)}>${this._t('btn.task_done')}</button>` : html`<button class="btn-primary start-task" ?disabled=${this._isTaskBusy(t.id)} @click=${()=>this._advance(t)}>${this._t('btn.start_task')}</button>`)
 										: t.status==="in_progress" ? html`<button class="btn-primary complete-task" ?disabled=${this._isTaskBusy(t.id)} @click=${()=>this._advance(t)}>${this._t('btn.complete_task')}</button>`
 										: t.status==="awaiting_approval" ? html`<span class="chip status-awaiting_approval">${this._t('lbl.awaiting')}</span>`
