@@ -1,4 +1,15 @@
-import { LitElement, html, css } from "https://unpkg.com/lit?module";
+// Bootstrap: pull Lit from HA frontend globals so the card can render without external imports
+const _haPanel = customElements.get("ha-panel-lovelace");
+const _Base = _haPanel ? Object.getPrototypeOf(_haPanel) : undefined;
+// Fallbacks from HA globals
+const LitElement = window.LitElement || (_Base ? _Base : class {});
+const html = (window.litHtml && window.litHtml.html) || window.html || (_Base?.prototype?.html);
+const css  = (window.litHtml && window.litHtml.css)  || window.css  || (_Base?.prototype?.css);
+
+if (!html || !css) {
+	throw new Error("chores4kids-card: Lit html/css not found in the frontend environment");
+}
+
 
 // Unified i18n (admin + child keys)
 const C4K_I18N = {
@@ -978,7 +989,7 @@ class Chores4KidsDevCard extends LitElement {
 		try{ this._collapsed = JSON.parse(localStorage.getItem('c4k_admin_collapsed')||'{}') || {}; }catch{ this._collapsed = {}; }
 		// completed timestamps
 		try{ this._completed = JSON.parse(localStorage.getItem('c4k_completed_ts')||'{}') || {}; }catch{ this._completed = {}; }
-		
+
 		// Bind storage listener
 		this._storageListener = this._handleStorageChange.bind(this);
 	}
@@ -1214,6 +1225,18 @@ class Chores4KidsDevCard extends LitElement {
 
 	// Helpers
 	_t(key, vars){ return c4kLocalize(key, this.hass || navigator.language || 'en', vars); }
+	_resolveUrl(url){
+		if (!url) return '';
+		if (String(url).startsWith('http') || String(url).startsWith('data:')) return url;
+		try{
+			const baseUrl = this.hass?.auth?.data?.hassUrl || '';
+			if (baseUrl && String(url).startsWith('/')) {
+				const base = baseUrl.endsWith('/') ? baseUrl.slice(0,-1) : baseUrl;
+				return base + url;
+			}
+		}catch(e){}
+		return url;
+	}
 	_statusLabel(s){ return this._t(`status.${s}`) || s; }
 	_effectiveStatus(t){
 		try{
@@ -1388,15 +1411,15 @@ class Chores4KidsDevCard extends LitElement {
 	}
 
 	// Completed timestamp helpers
-	_completedTsFor(task){ 
-		try{ 
+	_completedTsFor(task){
+		try{
 			// Prefer timestamp from task entity (stored in backend)
-			const ts = task?.completed_ts || this._completed?.[task?.id]; 
+			const ts = task?.completed_ts || this._completed?.[task?.id];
 			if(task?.status === 'awaiting_approval' && ts) {
 				console.log('Getting timestamp for task', task.id, ':', ts);
 			}
 			return ts;
-		}catch{ return undefined; } 
+		}catch{ return undefined; }
 	}
 	_takenTsFor(task){ try{ return task?.fastest_wins_claimed_ts; }catch{ return undefined; } }
 	_displayedTsFor(task){
@@ -2007,7 +2030,7 @@ class Chores4KidsDevCard extends LitElement {
 				</div>
 				<div class="shop-add-row">
 					<div class="shop-add-left">
-						${this._shopImage ? html`<img class="img-preview" src="${this._shopImage}" alt="preview" loading="lazy" decoding="async"/>` : html`<div class="img-preview" style="display:grid;place-items:center;color:var(--secondary-text-color);">${this._t('shop.image')}</div>`}
+						${this._shopImage ? html`<img class="img-preview" src="${this._resolveUrl(this._shopImage)}" alt="preview" loading="lazy" decoding="async"/>` : html`<div class="img-preview" style="display:grid;place-items:center;color:var(--secondary-text-color);">${this._t('shop.image')}</div>`}
 						<input id="c4k-shop-file" class="file-hidden" type="file" accept="image/*" @change=${this._onPickImage} />
 						<button class="btn-ghost" @click=${()=> this.shadowRoot.getElementById('c4k-shop-file')?.click()}>${this._t('shop.upload')}</button>
 					</div>
@@ -2019,14 +2042,14 @@ class Chores4KidsDevCard extends LitElement {
 						${this._store.items.map(i=> html`
 							${this._editItem && this._editItem.id===i.id ? html`
 								<tr>
-									<td data-label="${this._t('shop.item')}"><div style="display:flex; align-items:center; gap:8px;">${this._editItem.image? html`<img class="img-preview" style="width:36px;height:36px;" src="${this._editItem.image}" loading="lazy" decoding="async">`:''}<input style="max-width:220px;" .value=${this._editItem.title||''} @input=${e=> this._editItem={...this._editItem, title:e.target.value}} /><input type="file" accept="image/*" @change=${this._onPickEditImage} /></div></td>
+									<td data-label="${this._t('shop.item')}"><div style="display:flex; align-items:center; gap:8px;">${this._editItem.image? html`<img class="img-preview" style="width:36px;height:36px;" src="${this._resolveUrl(this._editItem.image)}" loading="lazy" decoding="async">`:''}<input style="max-width:220px;" .value=${this._editItem.title||''} @input=${e=> this._editItem={...this._editItem, title:e.target.value}} /><input type="file" accept="image/*" @change=${this._onPickEditImage} /></div></td>
 									<td data-label="${this._t('shop.price')}"><input type="number" style="max-width:120px;" .value=${this._editItem.price||0} @input=${e=> this._editItem={...this._editItem, price:Number(e.target.value||0)}} /></td>
 									<td data-label="${this._t('shop.active')}"><input type="checkbox" .checked=${this._editItem.active!==false} @change=${e=> this._editItem={...this._editItem, active: e.target.checked}} /></td>
 									<td data-label="${this._t('th.actions')}"><button class="btn-primary" @click=${this._saveEditItem}>${this._t('form.save')}</button><button class="btn-ghost" @click=${()=>{this._editItem=null; this.requestUpdate();}}>${this._t('form.cancel')}</button></td>
 								</tr>
 							`: html`
 								<tr>
-									<td data-label="${this._t('shop.item')}">${i.image? html`<img class="img-preview" style="width:36px;height:36px;margin-right:6px;vertical-align:middle;" src="${i.image}" loading="lazy" decoding="async">`:''}${i.title}</td>
+									<td data-label="${this._t('shop.item')}">${i.image? html`<img class="img-preview" style="width:36px;height:36px;margin-right:6px;vertical-align:middle;" src="${this._resolveUrl(i.image)}" loading="lazy" decoding="async">`:''}${i.title}</td>
 									<td data-label="${this._t('shop.price')}"><b>${i.price}</b></td>
 									<td data-label="${this._t('shop.active')}"><input type="checkbox" .checked=${i.active!==false} @change=${e=> this._toggleItemActive(i,e)} /></td>
 									<td data-label="${this._t('th.actions')}"><button class="btn-ghost" @click=${()=> this._startEditItem(i)}>${this._t('btn.edit')}</button><button class="btn-ghost" @click=${()=> this._openAdvanced(i)}>${this._t('shop.advanced')}</button><button class="btn-danger" @click=${()=>this._deleteShopItem(i.id)}>${this._t('btn.delete')}</button></td>
@@ -2040,7 +2063,7 @@ class Chores4KidsDevCard extends LitElement {
 									${this._store.items.map(i=> html`
 										<div class="shop-admin-card">
 											<div class="shop-admin-head">
-												${i.image? html`<img src="${i.image}" alt="${i.title}" loading="lazy" decoding="async">` : html`<div class="img-preview" style="width:44px;height:44px;display:grid;place-items:center;">?</div>`}
+												${i.image? html`<img src="${this._resolveUrl(i.image)}" alt="${i.title}" loading="lazy" decoding="async">` : html`<div class="img-preview" style="width:44px;height:44px;display:grid;place-items:center;">?</div>`}
 												<div class="shop-admin-meta">
 													<div class="shop-admin-title">${i.title}</div>
 													<div class="shop-admin-price">${i.price}</div>
@@ -2129,15 +2152,15 @@ class Chores4KidsDevCard extends LitElement {
 					<input style="flex:1" placeholder="${this._t('icon.search')}" .value=${this._iconSearch||''} @input=${e=>{ this._iconSearch=e.target.value; this.requestUpdate(); }} />
 					${this._taskIcon ? html`<button class="btn-ghost" @click=${()=>{ this._taskIcon=''; this.requestUpdate(); }}>${this._t('icon.clear')}</button>`: ''}
 				</div>
-				${(()=>{ 
-					const q=String(this._iconSearch||'').toLowerCase(); 
-					const filter=(arr)=> arr.filter(i=> i.id.toLowerCase().includes(q) || (i.label||'').toLowerCase().includes(q)); 
+				${(()=>{
+					const q=String(this._iconSearch||'').toLowerCase();
+					const filter=(arr)=> arr.filter(i=> i.id.toLowerCase().includes(q) || (i.label||'').toLowerCase().includes(q));
 					const customIcons = (this._customIcons||[]).map(c=> ({id:c.id, label:c.label}));
 					const allIcons = [...customIcons, ...C4K_ICON_SET];
-					const recent=filter((this._iconRecents||[]).map(id=> {const found = allIcons.find(x=>x.id===id); return {id, label: found?.label || id};})).slice(0,12); 
+					const recent=filter((this._iconRecents||[]).map(id=> {const found = allIcons.find(x=>x.id===id); return {id, label: found?.label || id};})).slice(0,12);
 					const base=filter(C4K_ICON_SET);
 					const custom=filter(customIcons);
-					const tile=(i)=> html`<button class="btn-ghost" style="display:flex;align-items:center;gap:8px;border:1px solid var(--divider-color);border-radius:8px;padding:8px;" @click=${()=> this._pickIcon(i.id)}><ha-icon icon="${i.id}"></ha-icon><small>${i.label||i.id}</small></button>`; 
+					const tile=(i)=> html`<button class="btn-ghost" style="display:flex;align-items:center;gap:8px;border:1px solid var(--divider-color);border-radius:8px;padding:8px;" @click=${()=> this._pickIcon(i.id)}><ha-icon icon="${i.id}"></ha-icon><small>${i.label||i.id}</small></button>`;
 					const customTile = html`<button class="btn-primary" style="display:flex;align-items:center;gap:8px;border:1px solid var(--divider-color);border-radius:8px;padding:8px;" @click=${()=> this._openCustomIconModal()}><ha-icon icon="mdi:plus-circle"></ha-icon><small>Custom</small></button>`;
 					return html`
 						${recent.length? html`<div style="font-size:.9rem;color:var(--secondary-text-color);margin:6px 0;">Recent</div>`:''}${recent.length? html`<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px;">${recent.map(tile)}</div>`:''}
@@ -2145,7 +2168,7 @@ class Chores4KidsDevCard extends LitElement {
 						${custom.length? html`<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px;">${custom.map(tile)}</div>`:''}
 						<div style="font-size:.9rem;color:var(--secondary-text-color);margin:6px 0;">All</div>
 						<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px;">${customTile}${base.map(tile)}</div>
-					`; 
+					`;
 				})()}
 				<div class="row" style="justify-content:flex-end; margin-top:10px;"><button class="btn-ghost" @click=${()=> this._iconModalOpen=false}>${this._t('form.cancel')}</button></div>
 			</div>
@@ -2160,7 +2183,7 @@ class Chores4KidsDevCard extends LitElement {
 					<input style="flex:1" placeholder="Søg efter ikon (f.eks. home, car, star, heart...)" .value=${this._customIconSearch||''} @input=${e=>{ this._customIconSearch=e.target.value; this._iconDisplayLimit = 200; this.requestUpdate(); }} />
 					${this._customIconSearch ? html`<button class="btn-ghost" @click=${()=>{ this._customIconSearch=''; this._iconDisplayLimit = 200; this.requestUpdate(); }}>Ryd</button>` : ''}
 				</div>
-				<div 
+				<div
 					style="flex:1; overflow-y:auto; border:1px solid var(--divider-color); border-radius:8px; padding:12px; margin:8px 0; background:var(--card-background-color);"
 					@scroll=${(e) => {
 						const el = e.target;
@@ -2181,14 +2204,14 @@ class Chores4KidsDevCard extends LitElement {
 							</div>`;
 						}
 						// Filter baseret på søgning - både med og uden "mdi:" prefix
-						const filtered = q 
+						const filtered = q
 							? this._availableIcons.filter(i=> {
 								const iconName = i.toLowerCase();
 								const searchTerm = q.startsWith('mdi:') ? q : q;
 								return iconName.includes(searchTerm) || iconName.replace('mdi:','').includes(searchTerm);
 							  })
 							: this._availableIcons;
-						
+
 						if(!filtered.length) {
 							return html`<div style="text-align:center; padding:40px; color:var(--secondary-text-color);">
 								<ha-icon icon="mdi:magnify-close" style="--mdc-icon-size:48px;"></ha-icon>
@@ -2196,18 +2219,18 @@ class Chores4KidsDevCard extends LitElement {
 								<div style="margin-top:8px; font-size:0.85rem;">Prøv f.eks: home, car, star, heart, light, door</div>
 							</div>`;
 						}
-						
+
 						// Begræns til displayLimit for performance
 						const displayLimit = this._iconDisplayLimit || 200;
 						const toShow = filtered.slice(0, displayLimit);
 						const hasMore = filtered.length > displayLimit;
-						
+
 						return html`
 							<div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(85px,1fr)); gap:8px;">
 								${toShow.map(icon=> html`
-									<button 
-										class="btn-ghost ${this._customIconPreview===icon?'btn-primary':''}" 
-										style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;border:1px solid var(--divider-color);border-radius:10px;padding:12px 6px;min-height:90px;transition:all 0.2s ease;${this._customIconPreview===icon?'transform:scale(1.05);box-shadow:0 4px 12px rgba(var(--rgb-primary-color),0.3);border-color:var(--primary-color);':''}" 
+									<button
+										class="btn-ghost ${this._customIconPreview===icon?'btn-primary':''}"
+										style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;border:1px solid var(--divider-color);border-radius:10px;padding:12px 6px;min-height:90px;transition:all 0.2s ease;${this._customIconPreview===icon?'transform:scale(1.05);box-shadow:0 4px 12px rgba(var(--rgb-primary-color),0.3);border-color:var(--primary-color);':''}"
 										@click=${()=>{ this._customIconPreview=icon; this._customIconLabel = icon.replace('mdi:','').split('-').map(w=> w.charAt(0).toUpperCase()+w.slice(1)).join(' '); this.requestUpdate(); }}
 										title="${icon}"
 									>
@@ -2240,11 +2263,11 @@ class Chores4KidsDevCard extends LitElement {
 									<b>Ikon ID:</b> ${this._customIconPreview}
 								</div>
 								<div style="font-size:.85rem; color:var(--secondary-text-color); margin-bottom:6px;">Navngiv dit custom ikon:</div>
-								<input 
-									placeholder="F.eks. Mit Hjem, Min Favorit Stjerne, etc." 
-									.value=${this._customIconLabel||''} 
+								<input
+									placeholder="F.eks. Mit Hjem, Min Favorit Stjerne, etc."
+									.value=${this._customIconLabel||''}
 									@input=${e=>{ this._customIconLabel=e.target.value; this.requestUpdate(); }}
-									style="width:100%; padding:10px; border-radius:8px; border:1px solid var(--divider-color);" 
+									style="width:100%; padding:10px; border-radius:8px; border:1px solid var(--divider-color);"
 								/>
 							</div>
 						</div>
@@ -2322,50 +2345,50 @@ class Chores4KidsDevCard extends LitElement {
 			</div>`: ''}
 		</div>`;
 	}
-	
+
 	_renderReassignModal(){
 		const task = this._reassignTask;
 		if (!task) return '';
-		
+
 		const approveOnly = async () => {
 			await this.hass.callService('chores4kids','approve_task',{ task_id: task.id });
 			this._reassignTask = null;
 			this.requestUpdate();
 		};
-		
+
 		const approveAndReassign = async () => {
 			// First approve
 			await this.hass.callService('chores4kids','approve_task',{ task_id: task.id });
-			
+
 			// Then assign today's version to same child(ren)
-			const targetIds = Array.isArray(task.repeat_child_ids) && task.repeat_child_ids.length 
-				? task.repeat_child_ids 
+			const targetIds = Array.isArray(task.repeat_child_ids) && task.repeat_child_ids.length
+				? task.repeat_child_ids
 				: (task.repeat_child_id ? [task.repeat_child_id] : [task.assigned_to]);
-			
+
 			for (const childId of targetIds) {
 				try {
 					// Find the unassigned template task
-					const templates = this._store.allTasks.filter(t => 
-						!t.assigned_to && 
-						t.title === task.title && 
+					const templates = this._store.allTasks.filter(t =>
+						!t.assigned_to &&
+						t.title === task.title &&
 						Number(t.points) === Number(task.points)
 					);
-					
+
 					if (templates.length > 0) {
-						await this.hass.callService('chores4kids','assign_task',{ 
-							task_id: templates[0].id, 
-							child_id: childId 
+						await this.hass.callService('chores4kids','assign_task',{
+							task_id: templates[0].id,
+							child_id: childId
 						});
 					}
 				} catch(e) {
 					console.error('Failed to reassign task:', e);
 				}
 			}
-			
+
 			this._reassignTask = null;
 			this.requestUpdate();
 		};
-		
+
 		return html`<div class="overlay ${task?'open':''}" @click=${e=>{ if (e.target.classList.contains('overlay')) { this._reassignTask=null; this.requestUpdate(); } }}>
 			<div class="modal" style="max-width: 560px; width: min(95vw, 560px);" @click=${e=>e.stopPropagation()}>
 				<h3>${this._t('overdue.reassign_prompt')}</h3>
@@ -2491,7 +2514,7 @@ class Chores4KidsDevCard extends LitElement {
 							<div class="shop-grid">
 								${items.map(i=> html`
 									<div class="shop-item">
-										${i.image ? html`<div class="img-wrap"><img src="${i.image}" alt="${i.title}" loading="lazy" decoding="async"></div>` : html`<div class="img-wrap" style="display:grid;place-items:center;opacity:.7;">${i.icon? html`<ha-icon icon="${i.icon}" style="--mdc-icon-size:48px"></ha-icon>`:'?'}</div>`}
+										${i.image ? html`<div class="img-wrap"><img src="${this._resolveUrl(i.image)}" alt="${i.title}" loading="lazy" decoding="async"></div>` : html`<div class="img-wrap" style="display:grid;place-items:center;opacity:.7;">${i.icon? html`<ha-icon icon="${i.icon}" style="--mdc-icon-size:48px"></ha-icon>`:'?'}</div>`}
 										<div class="body">
 											<div class="title">${i.title}</div>
 											<div class="meta"><span class="chip chip-points">${i.price} ${this._t('lbl.points')}</span></div>
@@ -2524,13 +2547,13 @@ class Chores4KidsDevCard extends LitElement {
 	_pickIcon(id){ this._taskIcon=id; try{ const arr=Array.isArray(this._iconRecents)? [...this._iconRecents]:[]; const next=[id,...arr.filter(x=>x!==id)].slice(0,12); this._iconRecents=next; localStorage.setItem('c4k_icn_recent', JSON.stringify(next)); }catch{} this._iconModalOpen=false; this.requestUpdate(); }
 	_openCustomIconModal(){ this._customIconModalOpen = true; this._customIconSearch = ''; this._customIconPreview = ''; this._customIconLabel = ''; this._iconDisplayLimit = 200; this._iconModalOpen = false; if(!this._availableIcons || !this._availableIcons.length) this._fetchAvailableIcons(); this.requestUpdate(); }
 	_closeCustomIconModal(){ this._customIconModalOpen = false; this._customIconSearch = ''; this._customIconPreview = ''; this._customIconLabel = ''; this._iconDisplayLimit = 200; this.requestUpdate(); }
-	async _fetchAvailableIcons(){ 
-		try{ 
+	async _fetchAvailableIcons(){
+		try{
 			// Hent ALLE MDI ikoner direkte fra CDN metadata
 			console.log('Fetching all MDI icons from CDN...');
 			const response = await fetch('https://cdn.jsdelivr.net/npm/@mdi/svg@latest/meta.json');
 			const data = await response.json();
-			
+
 			if (data && Array.isArray(data)) {
 				this._availableIcons = data.map(icon => `mdi:${icon.name}`).sort();
 				console.log('Successfully loaded ALL MDI icons:', this._availableIcons.length);
@@ -2540,21 +2563,21 @@ class Chores4KidsDevCard extends LitElement {
 		} catch(e) {
 			console.warn('Could not fetch from MDI CDN:', e);
 		}
-		
+
 		// Fallback: Prøv Home Assistant's API
-		try{ 
-			const result = await this.hass.callWS({ type: 'frontend/get_icons', category: 'mdi' }); 
-			const icons = result?.resources?.mdi || {}; 
-			this._availableIcons = Object.keys(icons).map(k=> `mdi:${k}`).sort(); 
+		try{
+			const result = await this.hass.callWS({ type: 'frontend/get_icons', category: 'mdi' });
+			const icons = result?.resources?.mdi || {};
+			this._availableIcons = Object.keys(icons).map(k=> `mdi:${k}`).sort();
 			console.log('Loaded icons via HA WebSocket:', this._availableIcons.length);
-			this.requestUpdate(); 
-		}catch(e){ 
-			console.error('Could not fetch icons, using fallback list:', e); 
+			this.requestUpdate();
+		}catch(e){
+			console.error('Could not fetch icons, using fallback list:', e);
 			// Sidste fallback: Generate common icons
 			this._availableIcons = this._generateFallbackIcons();
 			console.log('Using fallback icons:', this._availableIcons.length);
 			this.requestUpdate();
-		} 
+		}
 	}
 	_generateFallbackIcons(){
 		// Fallback list med de mest almindelige ikoner
@@ -2601,7 +2624,7 @@ class Chores4KidsDevCard extends LitElement {
 		const _skip = !!this._skipApproval;
 		const _fastest = !!this._fastestWins;
 		const _autoAssignIds = (scheduleMode ? Array.from(this._repeatAssign||[]) : []);
-		
+
 		// Check if today matches schedule - if so, auto-assign immediately
 		const now = new Date();
 		const jsDay = now.getDay(); // 0=Sun
@@ -2613,7 +2636,7 @@ class Chores4KidsDevCard extends LitElement {
 			repeatOn ? (_days.includes(todayBackend) || _days.includes(['sun','mon','tue','wed','thu','fri','sat'][todayBackend])) :
 			false
 		);
-		
+
 		// Always create a reusable unassigned template task.
 		// If today is included in repeat_days, we then assign today's copies from the template
 		// so the task stays editable under "Tasks" and assigned tasks remain linked.
@@ -2773,7 +2796,7 @@ class Chores4KidsDevCard extends LitElement {
 			console.error('Failed to manually reassign task:', e);
 		}
 	}
-	async _approve(task){ 
+	async _approve(task){
 		// Check if task is overdue and has auto-assign for today
 		if (this._isTaskOverdue(task) && this._autoAssignActive(task)) {
 			if (this._isScheduledToday(task)) {
@@ -2783,7 +2806,7 @@ class Chores4KidsDevCard extends LitElement {
 				return;
 			}
 		}
-		
+
 		// Normal approve (timestamp remains in backend for historical view)
 		await this.hass.callService('chores4kids','approve_task',{ task_id: task.id });
 	}
@@ -2908,7 +2931,7 @@ class Chores4KidsDevCard extends LitElement {
 				repeat_child_ids: _ids,
 				schedule_mode: scheduleMode || undefined,
 			});
-			
+
 			// Check if today is in repeat days and task is unassigned template - if so, auto-assign now
 			if (!this._editingTask.assigned_to && scheduleMode && _ids.length > 0) {
 				const now = new Date();
@@ -2921,7 +2944,7 @@ class Chores4KidsDevCard extends LitElement {
 					repeatOn ? (_days.includes(todayBackend) || _days.includes(['sun','mon','tue','wed','thu','fri','sat'][todayBackend])) :
 					false
 				);
-				
+
 				if (assignToday) {
 					// Assign only for children missing a today's active instance (avoid duplicates)
 					for (const cid of _ids) {
@@ -2935,9 +2958,9 @@ class Chores4KidsDevCard extends LitElement {
 								!this._isFromBeforeToday(t)
 							);
 							if (alreadyHasTodays) continue;
-							await this.hass.callService('chores4kids','assign_task',{ 
-								task_id: this._editingTask.id, 
-								child_id: cid 
+							await this.hass.callService('chores4kids','assign_task',{
+								task_id: this._editingTask.id,
+								child_id: cid
 							});
 						} catch(e) {
 							// Best-effort: ignore assign errors (e.g. backend rejects invalid child)
@@ -3006,12 +3029,12 @@ class Chores4KidsDevCard extends LitElement {
 			this._setTaskBusy(task.id, false);
 		}
 	}
-	async _advance(task){ 
-		if(!task||!task.id) return; 
+	async _advance(task){
+		if(!task||!task.id) return;
 		if (this._isTaskBusy(task.id)) return;
 		this._setTaskBusy(task.id, true);
 		try{
-			const next=task.status==='assigned'? 'in_progress' : 'awaiting_approval'; 
+			const next=task.status==='assigned'? 'in_progress' : 'awaiting_approval';
 			// Trigger konfetti hvis opgaven bliver completed
 			if(next === 'awaiting_approval') {
 				console.log('Triggering confetti!');
@@ -3023,9 +3046,9 @@ class Chores4KidsDevCard extends LitElement {
 				this._recordCompleted(task.id, ts);
 				this.requestUpdate();
 				// Send timestamp to backend
-				await this.hass.callService('chores4kids','set_task_status',{ task_id: task.id, status: next, completed_ts: ts }); 
+				await this.hass.callService('chores4kids','set_task_status',{ task_id: task.id, status: next, completed_ts: ts });
 			} else {
-				await this.hass.callService('chores4kids','set_task_status',{ task_id: task.id, status: next }); 
+				await this.hass.callService('chores4kids','set_task_status',{ task_id: task.id, status: next });
 			}
 		} finally {
 			this._setTaskBusy(task.id, false);
@@ -3036,7 +3059,7 @@ class Chores4KidsDevCard extends LitElement {
 		console.log('_triggerConfetti called!');
 		const container = document.createElement('div');
 		container.style.cssText = 'position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 99999; overflow: hidden;';
-		
+
 		// Inject keyframes directly
 		const style = document.createElement('style');
 		style.textContent = `
@@ -3046,7 +3069,7 @@ class Chores4KidsDevCard extends LitElement {
 			}
 		`;
 		document.head.appendChild(style);
-		
+
 		for(let i = 0; i < 1000; i++) {
 			const confetti = document.createElement('div');
 			const colors = ['#ff6b6b', '#4ecdc4', '#ffe66d', '#a8e6cf', '#ff8b94', '#ffd3b6', '#dcedc1', '#a8dadc', '#f1c0e8', '#cfbaf0'];
@@ -3054,7 +3077,7 @@ class Chores4KidsDevCard extends LitElement {
 			const left = Math.random() * 100;
 			const delay = Math.random() * 3;
 			const duration = 2.5 + Math.random() * 1;
-			
+
 			confetti.style.cssText = `
 				position: absolute;
 				width: 10px;
@@ -3084,7 +3107,8 @@ class Chores4KidsDevCard extends LitElement {
 				try{
 					// Cache-bust so deletions take effect immediately
 					const sep = url.includes('?') ? '&' : '?';
-					const audio = new Audio(`${url}${sep}_=${Date.now()}`);
+					const resolvedUrl = this._resolveUrl(url);
+					const audio = new Audio(`${resolvedUrl}${sep}_=${Date.now()}`);
 					audio.volume = 0.7;
 					await audio.play();
 					return; // success
@@ -3094,7 +3118,7 @@ class Chores4KidsDevCard extends LitElement {
 		}catch(e){ console.log('Sound playback error:', e); }
 	}
 	async _buy(item, childId){ if(!this._pointsEnabled()) return; if(!item?.id || !childId) return; await this.hass.callService('chores4kids','buy_shop_item',{ child_id: childId, item_id: item.id }); }
-	
+
 	// DEBUG: Mark task as overdue for testing
 	async _debugMarkOverdue(task) {
 		if(!task?.id) return;
